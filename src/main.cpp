@@ -33,6 +33,7 @@ public:
 	bool multiline {false};
 	bool raw {false};
 	bool skip_jis0201 {false};
+	bool no_offset {false};
 } cfg;
 
 void process_args(int argc, char ** argv);
@@ -55,6 +56,7 @@ int main(int argc, char ** argv)
 		{"shiftjis", &shiftjis_valid}, {"shift-jis", &shiftjis_valid}, {"sjis", &shiftjis_valid},
 		{"cp932", &cp932_valid}, {"windows932", &cp932_valid}, {"windows31j", &cp932_valid},
 		{"eucjp", &cp932_valid}, {"euc-jp", &cp932_valid}
+		// TODO: utf-8,... https://github.com/drojaazu/jstrings/issues/8
 	};
 	// clang-format on
 
@@ -116,7 +118,8 @@ int main(int argc, char ** argv)
 		string as_utf8;
 		for (auto & this_string : found_strings)
 		{
-			cout << setw(10) << this_string.first << ' ';
+			if (!cfg.no_offset)
+				cout << setw(10) << this_string.first << ' ';
 			if (cfg.raw)
 			{
 				copy(this_string.second.data(),
@@ -150,7 +153,7 @@ int main(int argc, char ** argv)
 void process_args(int argc, char ** argv)
 {
 	// clang-format off
-	string const short_opts {":l:c:e:mrsh"};
+	string const short_opts {":l:c:e:mrsnh"};
 	vector<option> const long_opts {
 		{"match-length", required_argument, nullptr, 'l'},
 		{"cutoff", required_argument, nullptr, 'c'},
@@ -158,6 +161,7 @@ void process_args(int argc, char ** argv)
 		{"multiline", no_argument, nullptr, 'm'},
 		{"raw", no_argument, nullptr, 'r'},
 		{"skip-jis0201", no_argument, nullptr, 's'},
+		{"no_offset", no_argument, nullptr, 'n'},
 		{"help", no_argument, nullptr, 'h'},
 		{nullptr, 0, nullptr, 0}
 	};
@@ -170,6 +174,7 @@ void process_args(int argc, char ** argv)
 		{false, "Do not split multiline strings", nullptr},
 		{false, "Output the data in its original encoding without converting to unicode", nullptr},
 		{false, "Skip JIS 0201 (8-bit) bytes", nullptr},
+		{false, "Don't output offset bytes", nullptr},
 		{false, "Display usage", nullptr}
 	};
 	// clang-format on
@@ -200,6 +205,9 @@ void process_args(int argc, char ** argv)
 				break;
 			case 's':
 				cfg.skip_jis0201 = true;
+				break;
+			case 'n':
+				cfg.no_offset = true;
 				break;
 			case 'h':
 				show_usage(long_opts.data(), opt_details.data(), cout);

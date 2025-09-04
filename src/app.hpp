@@ -16,15 +16,15 @@
 namespace app
 {
 static unsigned int const version_major {1};
-static unsigned int const version_minor {6};
+static unsigned int const version_minor {7};
 static unsigned int const version_patch {};
-static char const * version {"1.6"};
+static char const * version {"1.7"};
 
 static char const * name {"jstrings"};
 static char const * brief {"A tool for finding JIS-based Japanese text in binary data."};
-static char const * copyright {"©2018 Motoi Productions / Released under MIT License"};
-static char const * contact {"Damian R (damian@motoi.pro)"};
-static char const * website {"https://github.com/drojaazu"};
+static char const * copyright {"©2018 Motoi Productions, eadmaster / Released under MIT License"};
+static char const * contact {"Damian R (damian@motoi.pro), eadmaster (eadmaster@altervista.org)"};
+static char const * website {"https://github.com/eadmaster/jstrings"};
 } // namespace app
 
 #endif
